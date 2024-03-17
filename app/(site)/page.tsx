@@ -6,7 +6,7 @@ import PageContent from "@/app/(site)/components/PageContent";
 
 export const revalidate = 0;
 
-const page = async () => {
+const Home = async () => {
     const songs = await getSongs();
 
     return (
@@ -29,4 +29,4 @@ const page = async () => {
     );
 }
 
-export default page;
+export default Home;
