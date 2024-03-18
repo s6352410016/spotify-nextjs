@@ -4,6 +4,10 @@ This is a [Next.js](https://nextjs.org/) project bootstrapped with [`create-next
 
 First, run the development server:
 
+before run application required to add 
+( NEXT_PUBLIC_SUPABASE_URL , NEXT_PUBLIC_SUPABASE_ANON_KEY , SUPABASE_SERVICE_ROLE_KEY)
+in .env file as you set in supabase.
+
 ```bash
 npm run dev
 # or
