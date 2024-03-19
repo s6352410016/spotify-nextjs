@@ -4,7 +4,6 @@ import { Database } from "@/types_db";
 import { Price, Product } from "@/types";
 import { stripe } from "@/libs/stripe";
 import { toDateTime } from "@/libs/helpers";
-import { supabase } from "@supabase/auth-ui-shared";
 
 export const supabaseAdmin = createClient<Database>(
     process.env.NEXT_PUBLIC_SUPABASE_URL || "",
@@ -174,4 +173,28 @@ const manageSubscriptionStatusChange = async (
         trial_start: subscription.trial_start ? toDateTime(subscription.trial_start).toISOString() : null,
         trial_end: subscription.trial_end ? toDateTime(subscription.trial_end).toISOString() : null,
     }
+
+    const { error } = await supabaseAdmin
+        .from("subscriptions")
+        .upsert([subscriptionData]);
+
+    if (error) {
+        throw error;
+    }
+
+    console.log(`Inserted / Updated subscription [${subscription.id}] for ${uuid}`);
+
+    if (createAction && subscription.default_payment_method && uuid) {
+        await copyBillingDetailsToCustomer(
+            uuid,
+            subscription.default_payment_method as Stripe.PaymentMethod
+        );
+    }
+}
+
+export {
+    upsertProductRecord,
+    upsertPriceRecord,
+    createOrRetrieveACustomer,
+    manageSubscriptionStatusChange
 }
